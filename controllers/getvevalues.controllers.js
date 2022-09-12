@@ -2,11 +2,15 @@ import mongo from "../db/db.js";
 let db = await mongo();
 
 const list = async (req,res) => {
-    const authorization = req.headers.authorization
-    const token = authorization?.replace("Bearer ", "")
+    const token = res.locals.token
 
     try {
         const user = await db.collection("sessions").findOne({token:token})
+
+        if(!user){
+            res.status(401).send("invalid token");
+            return
+        }
         
         const values = await db.collection("values").find({userId:user.userId}).toArray();
 

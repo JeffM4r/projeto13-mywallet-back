@@ -4,12 +4,16 @@ import mongo from "../db/db.js";
 let db = await mongo();
 
 const create = async (req,res) => {
-    const { description, value } = req.body;
-    const authorization = req.headers.authorization
-    const token = authorization?.replace("Bearer ", "")
+    const { description, value } = res.locals.value;
+    const token = res.locals.token
 
     try {
         const user = await db.collection("sessions").findOne({token:token})
+
+        if(!user){
+            res.status(401).send("invalid token");
+            return
+        }
         
         const itemControl = {
             userId: user.userId,

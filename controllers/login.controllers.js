@@ -5,26 +5,33 @@ import mongo from "../db/db.js";
 let db = await mongo();
 
 const create = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = res.locals.user;
     let users;
 
     try {
         users = await db.collection("cadastrados").find().toArray();
+        
 
         const found = users.find(user => user.email === email);
 
         if (!found) {
-            res.status(409).send("User not found");
+            res.status(401).send("User not found");
             return
         }
 
         const passwordIsValid = bcrypt.compareSync(password, found.password)
+
+        if(!passwordIsValid){
+            res.status(401).send("User does not exist or wrong password");
+            return
+        }
+
         let alreadyLogged = await db.collection("sessions").findOne({ userId: found._id })
 
         if (alreadyLogged) {
             alreadyLogged = {
                 ...alreadyLogged,
-                lastStatus: Date.now()
+                time: Date.now()
             }
 
             await db.collection("sessions").updateOne({

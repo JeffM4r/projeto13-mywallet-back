@@ -3,7 +3,7 @@ import mongo from "../db/db.js";
 let db = await mongo();
 
 const create = async (req,res) => {
-    const {name, email, password} = req.body;
+    const {name, email, password} = res.locals.user;
     let cryptedPassword = bcrypt.hashSync(password, 10);
     let users;
     
