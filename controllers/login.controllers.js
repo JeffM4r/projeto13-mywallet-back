@@ -38,7 +38,7 @@ const create = async (req, res) => {
                 _id: alreadyLogged._id
             }, { $set: alreadyLogged })
 
-            res.status(200).send(alreadyLogged.token);
+            res.status(200).send({token: alreadyLogged.token, name:found.name});
             return
         }
 
@@ -50,7 +50,7 @@ const create = async (req, res) => {
                 time: Date.now()
             })
 
-            res.status(200).send(token);
+            res.status(200).send({token: token, name: found.name});
             return
         }
 

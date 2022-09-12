@@ -20,7 +20,7 @@ const create = async (req,res) => {
             description: description,
             value: value,
             type: "positive",
-            date: dayjs().format("DD/MM/YYYY")
+            date: dayjs().format("DD/MM")
         };
 
         await db.collection("values").insertOne(itemControl)

@@ -12,7 +12,9 @@ const list = async (req,res) => {
             return
         }
         
-        const values = await db.collection("values").find({userId:user.userId}).toArray();
+        let values = await db.collection("values").find({userId:user.userId}).toArray();
+        
+        values.reverse();
 
         res.status(200).send(values);
         return

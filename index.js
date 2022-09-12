@@ -26,7 +26,7 @@ setInterval(async () => {
         const sessions = await db.collection("sessions").find().toArray()
 
         sessions.forEach(async (session) => {
-            if (Math.round(session.time / 1000 + 60) < Math.round(Date.now() / 1000.0)){
+            if (Math.round(session.time / 1000 + 1500) < Math.round(Date.now() / 1000.0)){
                 db.collection("sessions").deleteOne(session)
             }
         
